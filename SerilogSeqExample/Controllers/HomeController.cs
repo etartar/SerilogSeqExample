@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace SerilogSeqExample.Controllers
 {
@@ -42,6 +43,8 @@ namespace SerilogSeqExample.Controllers
             };
 
             _logger.LogInformation("{@Caretta}", caretta);
+
+            throw new ArgumentException("caretta is null");
 
             return Ok(true);
         }

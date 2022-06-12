@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using SerilogSeqExample.Logs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +51,11 @@ namespace SerilogSeqExample
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSerilogRequestLogging(options =>
+            {
+                options.EnrichDiagnosticContext = Enricher.HttpRequestEnricher;
+            });
 
             app.UseEndpoints(endpoints =>
             {

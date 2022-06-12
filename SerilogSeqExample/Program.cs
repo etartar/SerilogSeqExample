@@ -1,14 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Serilog.Exceptions;
 using SerilogSeqExample.Logs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SerilogSeqExample
 {
@@ -22,9 +19,11 @@ namespace SerilogSeqExample
                     .WriteTo.Seq("http://localhost:5341/")
                     .MinimumLevel.Information()
                     .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
-                    .Enrich.WithProperty("AppName", "SerilogSeqExample")
-                    .Enrich.WithProperty("Environment", "Development")
+                    .Enrich.FromLogContext()
+                    .Enrich.WithEnvironmentName()
+                    .Enrich.WithMachineName()
                     .Enrich.With(new ThreadIdEnricher())
+                    .Enrich.WithExceptionDetails()
                     .CreateLogger();
 
                 Log.Information("Starting web host.");
